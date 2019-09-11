@@ -7,42 +7,25 @@ Created on Mon Sep  9 16:40:11 2019
 
 import requests
 
-def postdata(url:str, dictsensor:dict, idcolmeia: int):
+def postdata(url:str, dictdata:dict):
     
-    sensorpost = str()
+    r = requests.post(url,json=dictdata)
     
-    for key,val in dictsensor.items():
-        sensorpost = sensorpost + "\"{}\":\"{}\",\n".format(key,val)
-    
-    sensorpost = sensorpost[:-2] + "\n" # Deleting last comma
-    
-    data = """{{
-    \"id_colmeia\":\"{0}\",
-    \"values\":{{
-    {1}
-    }}
-    }}"""
-    
-    data = data.format(idcolmeia, sensorpost)
-    
-    #r = requests.post(url,json=data)
-    
-    return data
-    #return r
+    return r
     
 def main():
     
-    #idcolmeia = 50
-    #url = "http://200.129.43.208:3000/coleta/add"
+    idcolmeia = 50
+    url = "http://200.129.43.208:3000/coleta/add"
+    #url = "http://httpbin.org/post"
     
     dictsensor = {"temperatura":"38",
                   "umidade":"70"}
-    dictdata = {"idcolmeia":"50",
+    dictdata = {"id_colmeia":"{}".format(idcolmeia),
                 "values":dictsensor}
     
-    r = requests.post("http://200.129.43.208:3000/coleta/add",json=dictdata)
+    r = postdata(url, dictdata);
     
-    print(r.json)
-    #print(r.text)
+    print(r.text)
     
 main()
